@@ -1,3 +1,14 @@
+[![NPM version][npm-version-image]][npm-url] [![License][license-image]][license-url]  [![Build Status][travis-image]][travis-url]
+
+[npm-url]: https://npmjs.org/package/kothic
+[npm-version-image]: http://img.shields.io/npm/v/kothic.svg?style=flat
+
+[license-image]: https://img.shields.io/npm/l/kothic.svg?style=flat
+[license-url]: LICENSE
+
+[travis-url]: http://travis-ci.org/kothic/kothic-node
+[travis-image]: http://img.shields.io/travis/kothic/kothic-node/master.svg?style=flat
+
 **Kothic JS** is a full-featured JavaScript map rendering engine using HTML5 Canvas.
 It was initially developed as a JavaScript port of [Kothic](http://wiki.openstreetmap.org/wiki/Kothic) rendering engine written in Python. 
 
