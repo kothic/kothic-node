@@ -14,6 +14,9 @@
     "test": "./node_modules/.bin/mocha -u bdd --recursive",
     "test-cov": "./node_modules/nyc/bin/nyc.js --reporter=lcov --reporter=text --reporter=html ./node_modules/.bin/mocha -u bdd --recursive"
   },
+  "author": "Miroff",
+  "license": "BSD-2-Clause",
+  "repository": "https://github.com/kothic/kothic-node",
   "dependencies": {
     "canvas": "^2.4.1",
     "mapcss": "^1.0.0",
