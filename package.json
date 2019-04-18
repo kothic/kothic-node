@@ -1,18 +1,18 @@
 {
   "name": "kothic",
   "version": "0.2.0",
+  "main": "src/kothic",
   "devDependencies": {
+    "benchmark": "^2.1.4",
     "chai": "^4.0.0",
     "chai-subset": "^1.6.0",
-    "mocha": "^6.0.2",
-    "nyc": "^13.3.0",
-    "rewire": "^4.0.1",
-    "benchmark": "^2.1.4"
+    "mocha": "^6.1.3",
+    "nyc": "^14.0.0",
+    "rewire": "^4.0.1"
   },
   "scripts": {
     "test": "./node_modules/.bin/mocha -u bdd --recursive",
-    "test-cov": "./node_modules/nyc/bin/nyc.js --reporter=lcov --reporter=text --reporter=html ./node_modules/.bin/mocha -u bdd --recursive",
-    "browserify": "./node_modules/browserify/bin/cmd.js kothic-browser.js --debug >debug/kothic.js"
+    "test-cov": "./node_modules/nyc/bin/nyc.js --reporter=lcov --reporter=text --reporter=html ./node_modules/.bin/mocha -u bdd --recursive"
   },
   "dependencies": {
     "canvas": "^2.4.1",
