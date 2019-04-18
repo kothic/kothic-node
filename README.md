@@ -1,41 +1,48 @@
 **Kothic JS** is a full-featured JavaScript map rendering engine using HTML5 Canvas.
-It was initially developed as a JavaScript port of [Kothic](http://wiki.openstreetmap.org/wiki/Kothic) rendering engine written in Python.
+It was initially developed as a JavaScript port of [Kothic](http://wiki.openstreetmap.org/wiki/Kothic) rendering engine written in Python. 
 
-Check out the demo: http://kothic.org/
+**kothic-node** is a KothicJS port, designed to work as a server-side renderer. Due to incompatibility with original KothicJS in almost every aspect, it deserves a separate repository.
+
+Unlike original KothicJS kothic-node isn't limited to rendering OpenStreetMap data only. Any geo data in GeoJSON will be ok. 
+
+Instead of using HTML5 Canvas, kothic-node relies on [node-canvas](https://github.com/Automattic/node-canvas) module.
+
+**Warning:** kothic-node is a subject of active (but very slow) development and it's not intended for production use yet. 
 
 ### Features
-
- * Rendering [OpenStreetMap](http://openstreetmap.org) data visually on par with [Mapnik](http://mapnik.org)
- * [MapCSS](http://wiki.openstreetmap.org/wiki/MapCSS/0.2) support (see [How to Prepare a Map Style](https://github.com/kothic/kothic-js/wiki/How-to-prepare-map-style))
- * rendering from lightweight GeoJSON-like tiles (see [Tiles Format](https://github.com/kothic/kothic-js/wiki/Tiles-format))
- * easy integration with [Leaflet](http://leaflet.cloudmade.com) (interactive maps library)
-
-### Building Kothic
-
-Install Node.js, then run:
-
-```
-npm install
-npm install -g grunt-cli
-grunt
-```
-
-Minified Kothic source will be generated in the `dist` folder.
+ * Rendering any GeoJSON to an image 
+ * Native [MapCSS](http://wiki.openstreetmap.org/wiki/MapCSS/0.2) support without any additional data preparation
+ * GeoJSON as an internal data representation format
+ * Browser-compatible design, no NodeJS specific API is used
+ * As little dependencies as possible
 
 ### Basic usage
 
-Include `kothic.js` from the `dist` folder on your page. Now you can call:
+Install the library
+```npm i kothic```
 
 ```javascript
+const css = "way { width: 1; color: red;}";
+const kothic = new Kothic(css, {
+  //Synchronous mode for testing reasons
+  getFrame: (callback) => callback(),
+  browserOptimizations: false,
+  gallery: {
+    localImagesDirectory: '../../sandbox/maki/png'
+  },
+  mapcss: {
+    cache: {},
+    locales: []
+  },
+  debug: true
+});
+
 Kothic.render(
 	canvas, // canvas element (or its id) to render on
-	data, // JSON data to render
+	geojson, // GeoJSON data to render
 	zoom, // zoom level
-	{
-		onRenderComplete: callback, // (optional) callback to call when rendering is done
-    	styles: ['osmosnimki-maps', 'surface'], // (optional) only specified styles will be rendered, if any
-    	locales: ['be', 'ru', 'en'] // (optional) map languages, see below
-	});
+	callback, // onRenderingComplete callback
+);
 ```
 
 `locales` Kothic-JS supports map localization based on name:*lang* tags. Renderer will check all mentioned languages in order of persence.  If object doesn't have localized name, *name* tag will be used.
