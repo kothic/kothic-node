@@ -6,6 +6,7 @@
 
 'use strict';
 
+const MapCSS = require("./style/mapcss");
 const StyleManager = require("./style/style-manager");
 const Gallery = require("./style/gallery")
 const Renderer = require("./renderer/renderer");
@@ -16,8 +17,10 @@ const Renderer = require("./renderer/renderer");
  ** debug {boolean} — render debug information
  ** browserOptimizations {boolean} — enable set of optimizations for HTML5 Canvas implementation
  **/
-function Kothic(mapcss, options) {
+function Kothic(css, options={}) {
   this.setOptions(options);
+
+  const mapcss = new MapCSS(css, options.mapcss);
 
   this.styleManager = new StyleManager(mapcss, {groupFeaturesByActions: this.browserOptimizations});
 
@@ -34,12 +37,6 @@ function Kothic(mapcss, options) {
 }
 
 Kothic.prototype.setOptions = function(options) {
-  // if (options && typeof options.devicePixelRatio !== 'undefined') {
-  //     this.devicePixelRatio = options.devicePixelRatio;
-  // } else {
-  //     this.devicePixelRatio = 1;
-  // }
-
   if (options && typeof options.debug !== 'undefined') {
     this.debug = !!options.debug;
   } else {
@@ -73,32 +70,14 @@ Kothic.prototype.setOptions = function(options) {
 };
 
 Kothic.prototype.render = function (canvas, geojson, zoom, callback) {
-  // if (typeof canvas === 'string') {
-  // TODO: Avoid document
-  //     canvas = document.getElementById(canvas);
-  // }
-  // TODO: Consider moving this logic outside
-  // var devicePixelRatio = 1; //Math.max(this.devicePixelRatio || 1, 2);
 
   const width = canvas.width;
   const height = canvas.height;
-
-  // if (devicePixelRatio !== 1) {
-  //     canvas.style.width = width + 'px';
-  //     canvas.style.height = height + 'px';
-  //     canvas.width = canvas.width * devicePixelRatio;
-  //     canvas.height = canvas.height * devicePixelRatio;
-  // }
 
   var ctx = canvas.getContext('2d');
 
   //TODO: move to options node-canvas specific setting
   //ctx.globalCompositeOperation = 'copy'
-
-  // ctx.scale(devicePixelRatio, devicePixelRatio);
-
-  // var granularity = data.granularity,
-  //     ws = width / granularity, hs = height / granularity;
 
   const bbox = geojson.bbox;
   const hscale = width / (bbox[2] - bbox[0]);
