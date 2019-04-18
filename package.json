@@ -1,6 +1,6 @@
 {
   "name": "kothic",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "main": "src/kothic",
   "devDependencies": {
     "benchmark": "^2.1.4",
@@ -8,6 +8,7 @@
     "chai-subset": "^1.6.0",
     "mocha": "^6.1.3",
     "nyc": "^14.0.0",
+    "canvas": "^2.4.1",
     "rewire": "^4.0.1"
   },
   "scripts": {
@@ -18,7 +19,6 @@
   "license": "BSD-2-Clause",
   "repository": "https://github.com/kothic/kothic-node",
   "dependencies": {
-    "canvas": "^2.4.1",
     "mapcss": "^1.0.0",
     "rbush": "^2.0.1"
   }
