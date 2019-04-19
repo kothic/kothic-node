@@ -25,7 +25,7 @@ function Kothic(css, options={}) {
   this.styleManager = new StyleManager(mapcss, {groupFeaturesByActions: this.browserOptimizations});
 
   const images = mapcss.listImageReferences();
-  const gallery = new Gallery(options.gallery || {});
+  const gallery = new Gallery(options.gallery);
 
   this.rendererPromise = gallery.preloadImages(images).then(() => {
      return new Renderer(gallery, {

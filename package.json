@@ -1,6 +1,6 @@
 {
   "name": "kothic",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "main": "src/kothic",
   "devDependencies": {
     "benchmark": "^2.1.4",

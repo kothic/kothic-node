@@ -14,7 +14,8 @@ const kothic = new Kothic(css, {
   getFrame: (callback) => callback(),
   browserOptimizations: false,
   gallery: {
-    localImagesDirectory: '../../sandbox/maki/png'
+    localImagesDirectory: '../../sandbox/maki/png',
+    loadImage: loadImage
   },
   mapcss: {
     cache: {},

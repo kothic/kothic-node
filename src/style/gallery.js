@@ -1,9 +1,15 @@
 const path = require('path');
-const { loadImage } = require('canvas')
 
-function Gallery(options) {
+/**
+ ** @param loadImage {function} image provider (imageName) => Promise
+ **/
+function Gallery(options={}) {
   this.localImagesDirectory = options && options.localImagesDirectory;
   this.images = {};
+  this.loadImage = options.loadImage;
+  if (typeof(this.loadImage) !== 'function') {
+    throw new Error("gallery.loadImage option must be a function");
+  }
 }
 
 Gallery.prototype.preloadImages = function(images) {
@@ -12,11 +18,11 @@ Gallery.prototype.preloadImages = function(images) {
 
   //External images
   var promises = images.filter((image) => image.match(uriRegexp))
-      .map((image) => loadImage(image).then((data) => self.images[image] = data));
+      .map((image) => self.loadImage(image).then((data) => self.images[image] = data));
 
   if (this.localImagesDirectory) {
     const localPromises = images.filter((image) => !image.match(uriRegexp))
-      .map((image) => loadImage(path.join(self.localImagesDirectory, image)).then((data) => self.images[image] = data));
+      .map((image) => self.loadImage(path.join(self.localImagesDirectory, image)).then((data) => self.images[image] = data));
     promises = promises.concat(localPromises);
   }
 
