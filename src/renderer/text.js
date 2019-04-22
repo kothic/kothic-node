@@ -2,7 +2,7 @@
 
 const geom = require('../utils/geom');
 const contextUtils = require('../utils/style');
-//var textOnPath = require("./textonpath").textOnPath;
+//const textOnPath = require("./textonpath").textOnPath;
 const textOnPath = require("./curvedtext").render
 
 function renderText(ctx, feature, nextFeature, {projectPointFunction, collisionBuffer}) {
