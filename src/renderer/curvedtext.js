@@ -1,6 +1,7 @@
 'use strict';
 
 const colors = require('../utils/colors.js');
+const simplify = require("../utils/simplify.js");
 
 function deg(rad) {
 	return rad * 180 / Math.PI;
@@ -99,19 +100,15 @@ function calculateOffset(parts, offset) {
 
 function drawGlyph(ctx, glyph, hasHalo=false) {
 	ctx.translate(glyph.position[0], glyph.position[1]);
-	console.log(deg(glyph.angle))
   ctx.rotate(glyph.angle);
-	ctx.fillStyle = '#000';
 	ctx.beginPath();
-	ctx.rect(-3, -3, 6, 6);
-//	ctx.rect(glyph.position[0] - 1.5, glyph.position[1] - 1.5, 3, 3);
-	ctx.fill();
-	// if (hasHalo) {
-  // 	ctx.strokeText(glyph.glyph, glyph.offset[0], glyph.offset[1]);
-	// } else {
-	// 	ctx.fillText(glyph.glyph, glyph.offset[0], glyph.offset[1]);
-	// }
-	//
+
+	if (hasHalo) {
+  	ctx.strokeText(glyph.glyph, glyph.offset[0], glyph.offset[1]);
+	} else {
+		ctx.fillText(glyph.glyph, glyph.offset[0], glyph.offset[1]);
+	}
+
   ctx.rotate(-glyph.angle);
   ctx.translate(-glyph.position[0], -glyph.position[1]);
 }
@@ -134,6 +131,7 @@ function renderSegments(ctx, segments) {
 function adjustSegmentDirection(segment) {
 	//Reverse segment to turnover text from upside down
   if (segment.quadrant == '2,4') {
+		segment.angles.reverse();
     segment.angles = segment.angles.map((angle) => angle < 0 ? angle + Math.PI : angle - Math.PI);
     segment.partsLength.reverse();
     segment.points.reverse();
@@ -155,7 +153,6 @@ function calculateGlyphsPositions(segment, glyphs) {
   let [index, offset] = calculateOffset(segment.partsLength, startOffset);
   for (let i = 0; i < glyphs.length; i++) {
     const glyph = glyphs[i];
-console.log(glyph);
 		const startPointIndex = index;
 		const offsetX = offset;
 
@@ -164,7 +161,6 @@ console.log(glyph);
     while (reserved < glyph.width) {
       const requiredSpace = glyph.width - reserved;
 			//Current part is longer than required space
-console.log(segment.partsLength[index], offset, requiredSpace)
       if (segment.partsLength[index] - offset > requiredSpace) {
         offset += requiredSpace;
         reserved += requiredSpace;
@@ -197,8 +193,8 @@ function adjustAngle(pointStart, angleStart, pointNext, angleNext, offsetX, offs
 	}
 
 	//Draw a line from start point to end point of a glyph
-	const x = pointNext[0] + offsetX * Math.sin(angleNext) + offsetY * Math.sin(angleNext);
-	const y = pointNext[1] + offsetX * Math.cos(angleNext) + offsetY * Math.cos(angleNext);
+	const x = pointNext[0] + offsetX * Math.cos(angleNext) + offsetY * Math.sin(angleNext);
+	const y = pointNext[1] + offsetX * Math.sin(angleNext) + offsetY * Math.cos(angleNext);
 
 	//return angle of this line
 	return Math.atan2(y - pointStart[1], x - pointStart[0]);
@@ -215,7 +211,10 @@ function checkCollisions(segment, collisions) {
 		return collisions.check(box);
 }
 
-function render(ctx, points, text, hasHalo, collisions, debug=true) {
+function render(ctx, points, text, hasHalo, collisions, debug=false) {
+	//TODO: Make simplification adjustable
+  points = simplify(points, 5, false);
+
   const glyphs = text.split("")
       .map((l) => {
         const metrics = ctx.measureText(l);
@@ -230,11 +229,6 @@ function render(ctx, points, text, hasHalo, collisions, debug=true) {
   const textWidth = glyphs.reduce((acc, glyph) => acc + glyph.width, 0);
 
   let segments = createSegments(points);
-	segments = segments.map(adjustSegmentDirection);
-
-  if (debug) {
-    renderSegments(ctx, segments);
-  }
 
   //TODO: Merge first and last segments if possible
 
@@ -244,26 +238,25 @@ function render(ctx, points, text, hasHalo, collisions, debug=true) {
 		return;
 	}
 
-	if (points.length < 100) {
-		return;
-	}
-	console.log(points.length)
-	console.log(segments[segments.length - 1]);
-	segments = [segments[segments.length - 1]];
-	//segments = segments.filter((seg) => checkCollisions(seg, collisions))
+	segments = segments.map(adjustSegmentDirection);
 
+  if (debug) {
+    renderSegments(ctx, segments);
+  }
+
+	segments = segments.filter((seg) => checkCollisions(seg, collisions))
 
   //TODO Choose best segments
+	segments = [segments[0]]
 
   //Render text
   segments.forEach((seg) => {
 		const positions = calculateGlyphsPositions(seg, glyphs);
-
-		// if (hasHalo) {
-		// 	positions.forEach((glyph) => {
-		// 		drawGlyph(ctx, glyph, true);
-		// 	});
-		// }
+		if (hasHalo) {
+			positions.forEach((glyph) => {
+				drawGlyph(ctx, glyph, true);
+			});
+		}
 		positions.forEach((glyph) => {
 			drawGlyph(ctx, glyph, false);
 		});
