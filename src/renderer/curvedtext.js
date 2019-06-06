@@ -19,6 +19,21 @@ function quadrant(angle) {
   }
 }
 
+function vectorAngle(start, end) {
+	const dx = end[0] - start[0];
+	const dy = end[1] - start[1];
+
+	return Math.atan2(dy, dx);
+}
+
+function vectorLength(start, end) {
+	const dx = end[0] - start[0];
+	const dy = end[1] - start[1];
+
+	return Math.sqrt(dx ** 2 + dy ** 2);
+}
+
+
 function createSegments(points) {
   const segments = [];
   //TODO: Make this angle configurable
@@ -30,11 +45,8 @@ function createSegments(points) {
     const start = points[i];
     const end = points[i + 1];
 
-    const dx = end[0] - start[0];
-    const dy = end[1] - start[1];
-
-    const angle = Math.atan2(dy, dx);
-    const length = Math.sqrt(dx ** 2 + dy ** 2);
+		const angle = vectorAngle(start, end);
+    const length = vectorLength(start, end);
 
     // Try to attach current point to a previous segment
     if (segments.length > 0) {
@@ -200,18 +212,57 @@ function adjustAngle(pointStart, angleStart, pointNext, angleNext, offsetX, offs
 	return Math.atan2(y - pointStart[1], x - pointStart[0]);
 }
 
-function checkCollisions(segment, collisions) {
-	const box = segment.points.reduce((acc, point) => ({
-			minX: Math.min(acc.minX, point[0]),
-			minY: Math.min(acc.minY, point[1]),
-			maxX: Math.max(acc.maxX, point[0]),
-			maxY: Math.max(acc.maxX, point[1])
-		}), {minX: Infinity, minY: Infinity, maxX: -Infinity, maxY: -Infinity});
+// function checkCollisions(segment, collisions) {
+// 	const box = segment.points.reduce((acc, point) => ({
+// 			minX: Math.min(acc.minX, point[0]),
+// 			minY: Math.min(acc.minY, point[1]),
+// 			maxX: Math.max(acc.maxX, point[0]),
+// 			maxY: Math.max(acc.maxX, point[1])
+// 		}), {minX: Infinity, minY: Infinity, maxX: -Infinity, maxY: -Infinity});
+//
+// 		return collisions.check(box);
+// }
 
-		return collisions.check(box);
+/**
+ ** If the line is closed, merge first and last segments to ge rid of
+ ** extra breaking point
+ **/
+function mergeSegments(segments) {
+	if (segments.length < 2) {
+		return segments;
+	}
+	const s1 = segments[0];
+	const s2 = segments[segments.length - 1];
+	const p1 = s1.points[0];
+	const p2 = s2.points[s2.points.length - 1];
+
+	if (s1.quadrant !== s2.quadrant || p1[0] !== p2[0] || p1[1] !== p2[1]) {
+		return segments;
+	}
+
+	//console.log(segments.map( (s) => s.offset + " " + s. length));
+	const src = segments.shift();
+	const dest = segments.pop();
+
+	dest.angles.push(vectorAngle(dest.points[dest.points.length - 1], src.points[0]));
+	dest.angles = dest.angles.concat(src.angles);
+	dest.partsLength.push(vectorLength(dest.points[dest.points.length - 1], src.points[0]));
+	dest.partsLength = dest.partsLength.concat(src.partsLength);
+	dest.length += src.length;
+	dest.offset -= src.length;
+
+	//Shift all segments left
+	segments.forEach((seg) => {
+		seg.offset -= src.length;
+	});
+	dest.points = dest.points.concat(src.points);
+
+	segments.push(dest);
+
+	return segments;
 }
 
-function render(ctx, points, text, hasHalo, collisions, debug=false) {
+function render(ctx, points, text, hasHalo=false, collisions=null, debug=true) {
 	//TODO: Make simplification adjustable
   points = simplify(points, 5, false);
 
@@ -230,7 +281,8 @@ function render(ctx, points, text, hasHalo, collisions, debug=false) {
 
   let segments = createSegments(points);
 
-  //TODO: Merge first and last segments if possible
+	// Try to merge first and last segments if the line is closed
+	segments = mergeSegments(segments);
 
   segments = segments.filter((seg) => seg.length > textWidth * 1.2);
 
@@ -244,10 +296,8 @@ function render(ctx, points, text, hasHalo, collisions, debug=false) {
     renderSegments(ctx, segments);
   }
 
-	segments = segments.filter((seg) => checkCollisions(seg, collisions))
-
   //TODO Choose best segments
-	segments = [segments[0]]
+//	segments = [segments[0]]
 
   //Render text
   segments.forEach((seg) => {
