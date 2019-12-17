@@ -8,6 +8,7 @@ function Gallery(options={}) {
   this.images = {};
   this.loadImage = options.loadImage;
   if (typeof(this.loadImage) !== 'function') {
+    //TODO: Make optional to allow zero-configuration
     throw new Error("gallery.loadImage option must be a function");
   }
 }

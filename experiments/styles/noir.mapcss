@@ -1,3 +1,10 @@
+/*
+line[highway] {
+  width: 0;
+  casing-width: 0;
+}
+*/
+
 line[highway=trunk],
 line[highway=primary],
 line[highway=secondary],
@@ -13,7 +20,8 @@ line[highway=tertiary_link] {
 }
 
 line[highway=residential],
-line[highway=unclassified] {
+line[highway=unclassified],
+line[highway=living_street]{
   width: 1;
   color: gray;
 }
@@ -21,6 +29,15 @@ line[highway=unclassified] {
 area[natural=water],
 area[waterway] {
   fill-color: #005;
+}
+
+line[waterway] {
+  color: #005;
+  width: 3;
+}
+
+line[waterway=stream] {
+  width: 1;
 }
 
 area[natural=wood],
@@ -40,12 +57,25 @@ area[landuse=industrial] {
   fill-opacity: 0.5;
 }
 
-area[landuse=allotments] {
+area[landuse=allotments],
+area[landuse=farmyard] {
   fill-color: #c0cdc0;
   fill-opacity: 0.5;
+}
+
+area[landuse=greenfield],
+area[landuse=brownfield] {
+  fill-color: #559955;
+  fill-opacity: 0.5;
+}
+
+line[barrier] {
+  color: black;
+  width: 1;
 }
 
 area[building] {
   fill-color: #333;
   z-index: 100;
+  fill-opacity: 0.5;
 }
