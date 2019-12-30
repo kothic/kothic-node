@@ -4,7 +4,7 @@
   "main": "src/kothic",
   "devDependencies": {
     "benchmark": "^2.1.4",
-    "canvas": "^2.4.1",
+    "canvas": "^2.6.0",
     "chai": "^4.0.0",
     "chai-subset": "^1.6.0",
     "mocha": "^6.1.4",
