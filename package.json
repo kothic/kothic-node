@@ -1,13 +1,13 @@
 {
   "name": "kothic",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "main": "src/kothic",
   "devDependencies": {
     "benchmark": "^2.1.4",
-    "canvas": "^2.5.0",
-    "chai": "^4.0.0",
+    "canvas": "^2.6.1",
+    "chai": "^4.2.0",
     "chai-subset": "^1.6.0",
-    "mocha": "^6.1.4",
+    "mocha": "^6.2.2",
     "nyc": "^14.1.1",
     "rewire": "^4.0.1"
   },
@@ -19,7 +19,9 @@
   "license": "BSD-2-Clause",
   "repository": "https://github.com/kothic/kothic-node",
   "dependencies": {
-    "mapcss": "^1.0.0",
-    "rbush": "^2.0.1"
+    "JSONStream": "^1.3.5",
+    "mapcss": "^1.0.2",
+    "rbush": "^3.0.1",
+    "stream-json": "^1.3.1"
   }
 }

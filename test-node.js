@@ -26,9 +26,9 @@ const kothic = new Kothic(css, {
 
 console.time("Loading GeoJSON");
 //const geojson = JSON.parse(fs.readFileSync('../../sandbox/relief/contours-json/N50E086.json'));
-//const geojson = JSON.parse(fs.readFileSync('../../sandbox/relief/contours-json/N052E085.json'));
-//geojson.bbox = [85, 52, 85.1, 52.1];
-const geojson = JSON.parse(fs.readFileSync('tile.geojson'));
+const geojson = JSON.parse(fs.readFileSync('../../sandbox/relief/contours-json/N052E085.json'));
+geojson.bbox = [85, 52, 85.1, 52.1];
+//const geojson = JSON.parse(fs.readFileSync('tile.geojson'));
 //const geojson = JSON.parse(fs.readFileSync('ridges.geojson'));
 console.timeEnd("Loading GeoJSON");
 

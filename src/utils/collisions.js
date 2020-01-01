@@ -1,8 +1,8 @@
 'use strict';
-const rbush = require('rbush');
+const RBush = require('rbush');
 
 const CollisionBuffer = function (height, width) {
-  this.buffer = rbush(256);
+  this.buffer = new RBush(256);
   this.height = height;
   this.width = width;
 };
