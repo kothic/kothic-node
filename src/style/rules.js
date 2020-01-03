@@ -101,8 +101,30 @@ function apply(rules, tags, classes, zoom, featureType, locales) {
   return layers;
 }
 
+function applyCanvas(rules, zoom) {
+  const result = {};
+
+  for (var i = 0; i < rules.length; i++) {
+    const rule = rules[i];
+
+    const selectors = rule.selectors;
+    const actions = rule.actions;
+
+    for (var j = 0; j < selectors.length; j++) {
+      const selector = selectors[j];
+      if (matchers.matchCanvas(selector, zoom)) {
+        const props = unwindActions(actions, {}, result, [], []);
+
+        Object.assign(result, props);
+      }
+    }
+  }
+
+  return result;
+}
+
 /**
- ** return {layer, {prop, value}};
+ ** @returns {Object<String, RenderingDetails>}
  **/
 function applyRule(rule, tags, classes, zoom, featureType, locales) {
   const selectors = rule.selectors;
@@ -199,4 +221,5 @@ module.exports = {
   listKnownTags: listKnownTags,
   listKnownImages: listKnownImages,
   apply: apply,
+  applyCanvas: applyCanvas,
 }

@@ -1,5 +1,5 @@
 canvas {
-  color: darkgreen;
+  fill-color: darkgreen;
 }
 
 line[ele] {

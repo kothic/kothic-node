@@ -1,5 +1,17 @@
 'use strict';
 
+function matchCanvas(selector, zoom) {
+  if (selector.type !== 'canvas') {
+    return false;
+  }
+
+  if (!matchZoom(selector.zoom, zoom)) {
+    return false;
+  }
+
+  return true;
+}
+
 function matchSelector(selector, tags, classes, zoom, featureType) {
   if (!matchFeatureType(selector.type, featureType)) {
     return false;
@@ -202,5 +214,6 @@ module.exports = {
   matchAttribute: matchAttribute,
   matchClasses: matchClasses,
   matchSelector: matchSelector,
-  appendKnownTags: appendKnownTags
+  appendKnownTags: appendKnownTags,
+  matchCanvas: matchCanvas,
 }

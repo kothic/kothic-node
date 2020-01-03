@@ -84,4 +84,13 @@ MapCSS.prototype.apply = function(tags, zoom, featureType) {
   return layers;
 }
 
+/**
+ ** Apply MapCSS to a canvas element
+ ** @param {Number} zoom - Current zoom level
+ ** @returns {Object<String, anything>} Map of {@link RenderingDetails}
+ **/
+MapCSS.prototype.applyCanvas = function(zoom) {
+  return rules.applyCanvas(this.rules, zoom);
+}
+
 module.exports = MapCSS;

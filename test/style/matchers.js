@@ -249,4 +249,18 @@ describe("MapCSS matchers", () => {
       expect(matchers.matchSelector({type: 'node', attributes: [{type: 'absence', key: 'ele'}]}, {ele: 1000}, [], 10, 'Point')).to.be.false;
     });
   });
+
+  describe("Match canvas", () => {
+    it("positive case", () => {
+      expect(matchers.matchCanvas({type: 'canvas'}, 10)).to.be.true;
+    });
+
+    it("zoom level", () => {
+      expect(matchers.matchCanvas({type: 'canvas', zoom: {type: 'z', begin: 6, end: 9}}, 10)).to.be.false;
+    });
+
+    it("wrong type", () => {
+      expect(matchers.matchCanvas({type: 'line'}, 10)).to.be.false;
+    });
+  });
 });

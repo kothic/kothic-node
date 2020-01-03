@@ -4,6 +4,7 @@ const CollisionBuffer = require("../utils/collisions");
 const canvasContext = require("../utils/style");
 const flow = require("../utils/flow");
 
+const background = require("./background");
 const line = require("./line");
 const polygon = require("./polygon");
 const text = require("./text");
@@ -11,6 +12,7 @@ const shield = require("./shield");
 const icon = require("./icon");
 
 const renders = {
+  canvas: background.render,
   casing: line.renderCasing,
   line: line.render,
   polygon: polygon.render,
@@ -25,22 +27,6 @@ function Renderer(gallery, options) {
   this.projectPointFunction = options.projectPointFunction;
   this.getFrame = options.getFrame;
   this.gallery = gallery;
-}
-
-Renderer.prototype.renderBackground = function(layers, ctx, width, height, zoom) {
-  ctx.fillStyle = '#ddd';
-  ctx.fillRect(0, 0, width, height);
-
-  //TODO: StyleManager should create background as a layer instead of messing with styles manually
-  // var style = this.styleManager.restyle(styles, {}, {}, zoom, 'canvas', 'canvas');
-  //
-  // var fillRect = function () {
-  //     ctx.fillRect(-1, -1, width + 1, height + 1);
-  // };
-  //
-  // for (var i in style) {
-  //     polygon.fill(ctx, style[i], fillRect);
-  // }
 }
 
 function renderCollisions(ctx, node) {

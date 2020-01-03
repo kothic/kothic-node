@@ -133,6 +133,18 @@ describe("Rules", () => {
     });
   });
 
+  describe("applyCanvas()", () => {
+    it("Default canvas", () => {
+      expect(rules.applyCanvas(expr("canvas { color: red; }"), 10))
+        .to.have.property('color', 'red')
+    });
+
+    it("Multiple canvases with different zoom", () => {
+      expect(rules.applyCanvas(expr("canvas|z-9 { color: red; } canvas|z10 { color: green; } canvas|z11- { color: white; }"), 10))
+        .to.have.property('color', 'green')
+    });
+  });
+
   describe("Set statements", () => {
     it("Set class layer", () => {
       const classes = [];

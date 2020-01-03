@@ -82,7 +82,18 @@ function extractActionValue(spec, actions) {
 }
 
 
-
+/**
+ ** Create rendering details for specified Feature Object
+ ** @param {FeatureObject} feature — Feature Object as described in {@link https://tools.ietf.org/html/rfc7946#section-3.2|RFC7946}
+ ** @param {String} kothicId — unique identifier of Feature Object
+ ** @param {Number} zoom — zoom level
+ **
+ ** @return {Map<String, RenderingDetails>}
+ ** @typedef {Object} RenderingDetails
+ ** @property {String} kothicId — Unique Feature Object identifier
+ ** @property {Geometry} geometry — Geometry Object as described in {@link https://tools.ietf.org/html/rfc7946#section-3.1|RFC7946}
+ ** @property {Map} actions — Map of rendering details
+ **/
 StyleManager.prototype.createFeatureRenders = function(feature, kothicId, zoom) {
   const featureActions = this.mapcss.apply(feature.properties, zoom, feature.geometry.type);
 
@@ -150,11 +161,19 @@ function compareLayers(a, b) {
     return layerNameA.localeCompare(layerNameB);
   }
 }
+
 /**
+ ** @param {Array<FeatureObject>} features - Feature Objects to be rendered
+ ** @param {Number} zoom - zoom level
+ ** @return {Array<RenderingDetails>} [{render: 'casing', zIndex: 0, features: []}, {render: 'line', features: []}, {render: 'line', features: []}]
  **
- **
- ** @return {array} [{render: 'casing', zIndex: 0, features: []}, {render: 'line', features: []}, {render: 'line', features: []}]
- **
+ ** @typedef {Object} RenderingDetails - Single feature rendering details
+ ** @property {String} render - render name, @see renderer/renderer
+ ** @property {Number} zIndex - z-index of the feature within current layer.
+ ** NB: Used for debug only
+ ** @property {Number} majorZIndex - z-index of the current layer
+ ** NB: Used for debug only
+ ** @property {Array<RenderingDetails>} features -
  **/
 StyleManager.prototype.createLayers = function(features, zoom) {
   const layers = {};
@@ -169,7 +188,16 @@ StyleManager.prototype.createLayers = function(features, zoom) {
     }
   }
 
-  const result = [];
+  const canvas = this.mapcss.applyCanvas(zoom);
+
+  const result = [{
+    render: 'canvas',
+    features: [{
+      kothicId: 'canvas',
+      actions: canvas
+    }]
+  }];
+
   const layerKeys = Object.keys(layers)   // ["0,casings", "1,lines"]
     .map((k) => k.split(","))             // [["0", "casings"], ["1", "lines"]]
     .sort(compareLayers)
@@ -184,7 +212,6 @@ StyleManager.prototype.createLayers = function(features, zoom) {
         render: render,
         zIndex: parseInt(zIndex),
         majorZIndex: parseInt(majorZIndex),
-        objectZIndex: layerName,
         features: features
       });
     });

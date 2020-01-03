@@ -18,6 +18,12 @@ describe("MapCSS", () => {
       const layers = m.apply({}, 10, 'LineString');
       expect(layers).to.have.deep.property('default', {color: 'red'});
     });
+
+    it("Apply canvas", () => {
+      const m = new MapCSS("canvas { color: white; }");
+      const actions = m.applyCanvas(zoom=10);
+      expect(actions).to.have.property('color', 'white');
+    });
   });
 
   describe("Cache", () => {
