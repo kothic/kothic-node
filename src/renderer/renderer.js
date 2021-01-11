@@ -29,6 +29,7 @@ function Renderer(gallery, options) {
   this.projectPointFunction = options.projectPointFunction;
   this.getFrame = options.getFrame;
   this.gallery = gallery;
+  this.options = options;
 }
 
 function renderCollisions(ctx, node) {
@@ -54,7 +55,8 @@ Renderer.prototype.render = function(layers, ctx, tileWidth, tileHeight, project
     tileWidth: tileWidth,
     tileHeight: tileHeight,
     projectPointFunction: projectPointFunction,
-    groupFeaturesByActions: self.groupFeaturesByActions
+    groupFeaturesByActions: self.groupFeaturesByActions,
+    options: this.options
   }
 
   const funcs = layers.map((layer) => ((next) => {

@@ -5,7 +5,7 @@ const contextUtils = require('../utils/style');
 
 module.exports = {
   pathOpened: false,
-  render: function (ctx, feature, nextFeature, {projectPointFunction, tileWidth, tileHeight, groupFeaturesByActions, gallery}) {
+  render: function (ctx, feature, nextFeature, {projectPointFunction, tileWidth, tileHeight, groupFeaturesByActions, gallery, options}) {
     const actions = feature.actions;
     const nextActions = nextFeature && nextFeature.actions;
     if (!this.pathOpened) {

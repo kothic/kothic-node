@@ -2,12 +2,15 @@
   * Collection of geometry utillities
   */
 
-// check if the point [in XY coordinates] is on tile's edge
-// returns 4-bits bitmask of affected tile boundaries:
-//   bit 0 - left
-//   bit 1 - right
-//   bit 2 - top
-//   bit 3 - bottom
+/**
+  *
+  * check if the point [in XY coordinates] is on tile's edge
+  * returns 4-bits bitmask of affected tile boundaries:
+  *   bit 0 - left
+  *   bit 1 - right
+  *   bit 2 - top
+  *   bit 3 - bottom
+  */
 exports.isOnTileBoundary = function(p, tile_width, tile_height) {
   var r = 0;
   if (p[0] === 0) {
@@ -53,6 +56,9 @@ exports.getReprPoint = function (geometry, projectPointFunction) {
     //TODO: Don't expect we're have this field. We may have plain JSON here,
     // so it's better to check a feature property and calculate polygon centroid here
     // if server doesn't provide representative point
+    if (!geometry.reprpoint) {
+      throw new Error("Geometry doesn't have reprpoint")
+    }
     point = geometry.reprpoint;
     break;
   case 'LineString':
@@ -70,6 +76,10 @@ exports.getReprPoint = function (geometry, projectPointFunction) {
     //TODO: Disassemble multi point
     return;
   case 'MultiPolygon':
+    if (!geometry.reprpoint) {
+      throw new Error("Geometry doesn't have reprpoint")
+    }
+
     point = geometry.reprpoint;
     break;
   case 'MultiLineString':

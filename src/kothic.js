@@ -17,6 +17,8 @@ const Profiler = require("./utils/profiler")
  ** getFrame:Function — Function, will be called prior the heavy operations
  ** debug {boolean} — render debug information
  ** browserOptimizations {boolean} — enable set of optimizations for HTML5 Canvas implementation
+ ** rendering.drawOnTileEdges {boolean} — allow rendering lines on the tile edges.
+ ** This option requires GeoJSON to include some buffer around the tile to avoid artifacts
  **/
 function Kothic(css, options={}) {
   this.setOptions(options);
@@ -29,11 +31,11 @@ function Kothic(css, options={}) {
   const gallery = new Gallery(options.gallery);
 
   this.rendererPromise = gallery.preloadImages(images).then(() => {
-     return new Renderer(gallery, {
+     return new Renderer(gallery, Object.assign(options.rendering, {
       groupFeaturesByActions: this.browserOptimizations,
       debug: this.debug,
       getFrame: this.getFrame
-    });
+    }));
   }, (err) => console.error(err));
 }
 

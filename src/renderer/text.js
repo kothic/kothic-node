@@ -42,7 +42,7 @@ function renderText(ctx, feature, nextFeature, {projectPointFunction, collisionB
     const letterWidth = textWidth / text.length;
     const width = textWidth;
     const height = letterWidth * 2.5;
-    const offsetY = actions['text-offset'];
+    const offsetY = actions['text-offset'] || 0;
 
     const center = [point[0], point[1] + offsetY];
     if (!actions['text-allow-overlap']) {

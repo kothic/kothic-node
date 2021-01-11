@@ -24,6 +24,9 @@ const kothic = new Kothic(css, {
     cache: {},
     locales: []
   },
+  rendering: {
+    drawOnTileEdges: true
+  }
   debug: true
 });
 

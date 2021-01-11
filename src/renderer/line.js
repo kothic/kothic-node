@@ -5,7 +5,7 @@ const contextUtils = require('../utils/style');
 //TODO: Refactor to class
 module.exports = {
   pathOpened: false,
-  renderCasing: function (ctx, feature, nextFeature, {projectPointFunction, tileWidth, tileHeight, groupFeaturesByActions}) {
+  renderCasing: function (ctx, feature, nextFeature, {projectPointFunction, tileWidth, tileHeight, groupFeaturesByActions, options}) {
     const actions = feature.actions;
     const nextActions = nextFeature && nextFeature.actions;
 
@@ -16,7 +16,7 @@ module.exports = {
 
     //TODO: Is MapCSS spec really allows a fallback from "casing-dashes" to "dashes"?
     const dashes = actions['casing-dashes'] || actions['dashes'];
-    path(ctx, feature.geometry, dashes, false, projectPointFunction, tileWidth, tileHeight);
+    path(ctx, feature.geometry, dashes, !!options.drawOnTileEdges, projectPointFunction, tileWidth, tileHeight);
 
     if (groupFeaturesByActions &&
         nextFeature &&
@@ -38,7 +38,7 @@ module.exports = {
     this.pathOpened = false;
   },
 
-  render: function (ctx, feature, nextFeature, {projectPointFunction, tileWidth, tileHeight, groupFeaturesByActions, gallery}) {
+  render: function (ctx, feature, nextFeature, {projectPointFunction, tileWidth, tileHeight, groupFeaturesByActions, gallery, options}) {
     const actions = feature.actions;
     const nextActions = nextFeature && nextFeature.actions;
     if (!this.pathOpened) {
@@ -46,7 +46,7 @@ module.exports = {
        ctx.beginPath();
     }
 
-    path(ctx, feature.geometry, actions['dashes'], false, projectPointFunction, tileWidth, tileHeight);
+    path(ctx, feature.geometry, actions['dashes'], !!options.drawOnTileEdges, projectPointFunction, tileWidth, tileHeight);
 
     if (groupFeaturesByActions &&
         nextFeature &&
