@@ -262,7 +262,7 @@ function mergeSegments(segments) {
 	return segments;
 }
 
-function render(ctx, points, text, hasHalo=false, collisions=null, debug=true) {
+function render(ctx, points, text, hasHalo=false, collisions=null, debug=false) {
 	//TODO: Make simplification adjustable
   points = simplify(points, 5, false);
 

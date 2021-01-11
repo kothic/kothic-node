@@ -1,13 +1,13 @@
 {
   "name": "kothic",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "main": "src/kothic",
   "devDependencies": {
     "benchmark": "^2.1.4",
     "canvas": "^2.6.1",
     "chai": "^4.2.0",
     "chai-subset": "^1.6.0",
-    "mocha": "^6.2.2",
+    "mocha": "^6.2.3",
     "nyc": "^14.1.1",
     "rewire": "^4.0.1"
   },
@@ -22,6 +22,6 @@
     "JSONStream": "^1.3.5",
     "mapcss": "^1.0.2",
     "rbush": "^3.0.1",
-    "stream-json": "^1.3.1"
+    "stream-json": "^1.7.1"
   }
 }

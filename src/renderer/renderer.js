@@ -1,5 +1,6 @@
 'use strict';
 
+const Profiler = require("../utils/profiler")
 const CollisionBuffer = require("../utils/collisions");
 const canvasContext = require("../utils/style");
 const flow = require("../utils/flow");
@@ -10,6 +11,7 @@ const polygon = require("./polygon");
 const text = require("./text");
 const shield = require("./shield");
 const icon = require("./icon");
+
 
 const renders = {
   canvas: background.render,
@@ -58,16 +60,12 @@ Renderer.prototype.render = function(layers, ctx, tileWidth, tileHeight, project
   const funcs = layers.map((layer) => ((next) => {
     const features = layer.features;
 
-    //TODO: Emit event
-    console.time(layer.render);
-
-    const renderFn = renders[layer.render];
-    for (var j = 0, len = features.length; j < len; j++) {
-      renderFn(ctx, features[j], features[j + 1], context);
-    }
-
-    //TODO: Emit event
-    console.timeEnd(layer.render);
+    Profiler.timify("Rendering " + layer.render, () => {
+      const renderFn = renders[layer.render];
+      for (var j = 0, len = features.length; j < len; j++) {
+        renderFn(ctx, features[j], features[j + 1], context);
+      }
+    });
 
     next();
   }));

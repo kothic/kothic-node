@@ -10,6 +10,7 @@ const MapCSS = require("./style/mapcss");
 const StyleManager = require("./style/style-manager");
 const Gallery = require("./style/gallery")
 const Renderer = require("./renderer/renderer");
+const Profiler = require("./utils/profiler")
 
 /**
  ** Available options:
@@ -89,13 +90,9 @@ Kothic.prototype.render = function (canvas, geojson, zoom, callback) {
     ];
   }
 
-  console.time('styles');
-
   // setup layer styles
   // Layer is an array of objects, already sorted
-  const layers = this.styleManager.createLayers(geojson.features, zoom);
-
-  console.timeEnd('styles');
+  const layers = Profiler.timify("Apply styles", () => this.styleManager.createLayers(geojson.features, zoom));
 
   this.rendererPromise.then((renderer) => {
     renderer.render(layers, ctx, width, height, project, callback);
