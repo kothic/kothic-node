@@ -31,7 +31,7 @@ function Kothic(css, options={}) {
   const gallery = new Gallery(options.gallery);
 
   this.rendererPromise = gallery.preloadImages(images).then(() => {
-     return new Renderer(gallery, Object.assign(options.rendering, {
+    return new Renderer(gallery, Object.assign(options.rendering, {
       groupFeaturesByActions: this.browserOptimizations,
       debug: this.debug,
       getFrame: this.getFrame
@@ -40,6 +40,8 @@ function Kothic(css, options={}) {
 }
 
 Kothic.prototype.setOptions = function(options) {
+  options.rendering = options.rendering || {};
+
   if (options && typeof options.debug !== 'undefined') {
     this.debug = !!options.debug;
   } else {
